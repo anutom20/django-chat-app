@@ -48,11 +48,11 @@ python manage.py migrate
 
 5.  start the ASGI dev server
 
-        ```bash
-        python manage.py runserver
-        ```
+```bash
+python manage.py runserver
+```
 
-    access application at http://localhost:8000
+access application at http://localhost:8000
 
 ### Documentation
 

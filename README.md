@@ -20,17 +20,23 @@ Django-ChatApp is a real-time chat application that allows users to communicate 
 
 1. Clone the repository:
 
-   ```bash
-   git clone https://github.com/anutom20/django-chat-app.git
-   ```
+```bash
+git clone https://github.com/anutom20/django-chat-app.git
+```
 
-2. install the required dependencies
+2. create a venv and activate it
+
+```bash
+python3 -m venv venv
+```
+
+3. install the required dependencies
 
 ```bash
 pip install -r requirements.txt
 ```
 
-3. make db migrations
+4. make db migrations
 
 ```bash
 python manage.py makemigrations
@@ -40,7 +46,7 @@ python manage.py makemigrations
 python manage.py migrate
 ```
 
-4.  start the ASGI dev server
+5.  start the ASGI dev server
 
         ```bash
         python manage.py runserver

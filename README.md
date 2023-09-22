@@ -52,7 +52,7 @@ python manage.py migrate
 python manage.py runserver
 ```
 
-access application at http://localhost:8000
+access application at http://localhost:800
 
 ### Documentation
 

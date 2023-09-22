@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Recommended Friends</title>
+</head>
+
+<body>
+    <h1>Top 5 Recommended Friends:</h1>
+    <ul>
+        {% for friend_id in recommended_friends %}
+        <li>{{ friend_id }}</li>
+        {% endfor %}
+    </ul>
+</body>
+
+</html>

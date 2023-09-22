@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Login</title>
+</head>
+
+<body>
+    <h1>Login</h1>
+    {% if success_message %}
+    <p class="success-message">{{ success_message }}</p>
+    {% endif %}
+    <form method="post" action="{% url 'user-login' %}">
+        {% csrf_token %}
+        {{ form.non_field_errors }}
+        <div>
+            <label for="{{ form.username.id_for_label }}">Username:</label>
+            <input type="text" id="username" name="username" required>
+            <br>
+        </div>
+        <div>
+            <label for="{{ form.password.id_for_label }}">Password:</label>
+            <input type="password" id="password" name="password" required>
+            <br>
+        </div>
+        <input type="submit" value="Login">
+    </form>
+
+    {% if user_id and username and user_email and token %}
+    <div class="user-details">
+        <p>User ID: {{ user_id }}</p>
+        <p>Username: {{ username }}</p>
+        <p>User Email: {{ user_email }}</p>
+        <p>Token: {{ token }}</p>
+    </div>
+
+    {% if token %}
+    <script>
+        var token = "{{ token }}";
+        var username = "{{ username }}"
+        const maxAgeInSeconds = 3600 * 24 * 30; 
+
+        const expirationDate = new Date();
+        expirationDate.setTime(expirationDate.getTime() + (maxAgeInSeconds * 1000));
+
+        document.cookie = `Authorization=Token ${token}; max-age=${maxAgeInSeconds}; path=/; expires=${expirationDate.toUTCString()}`;
+        document.cookie = `username=${username}; path=/; expires=${expirationDate.toUTCString()}`; 
+    </script>
+    {% endif %}
+
+    {% endif %}
+</body>
+
+</html>

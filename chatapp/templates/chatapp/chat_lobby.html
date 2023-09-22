@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat Page</title>
+</head>
+<body>
+    <h1 id="page-header">Let's Chat!</h1>
+    
+    <p id="username"></p>
+    
+    <form id="form">
+        <div>
+            <label for="message">Type message here:</label>
+            <input type="text" name="message">
+            <button type="submit">Send</button>
+        </div>
+        <div id="messages"></div>
+    </form>
+    <script type="text/javascript">
+        let authToken = getCookieValue("Authorization").split(" ")[1];
+        if(authToken){
+            const currentUrl = window.location.href;
+            const urlParts = currentUrl.split('/');
+            // console.log(urlParts);
+            const otherUsername = urlParts[urlParts.length - 2];
+            console.log(otherUsername);
+
+            let url = `ws://${window.location.host}/ws/socket-server/?token=${authToken}&other_user=${otherUsername}`
+
+            const chatSocket = new WebSocket(url)
+
+            chatSocket.onmessage = function (e) {
+                let data = JSON.parse(e.data)
+                console.log('Data', data)
+
+                if (data.type === 'chat') {
+                    let messages = document.getElementById('messages')
+                    messages.insertAdjacentHTML('beforeend', `<div>
+                    <p>[${data.sender_username}] : ${data.message}</p>
+                    </div>`)
+                }
+            }
+
+            let username_p = document.getElementById("username");
+            const username_value = getCookieValue("username");
+            username_p.insertAdjacentHTML('beforeend', `<p>Welcome ${username_value} , you are chatting with ${otherUsername}</p>`)
+
+            let form = document.getElementById('form')
+            form.addEventListener('submit', (e) => {
+                e.preventDefault();
+                let message = e.target.message.value
+                chatSocket.send(JSON.stringify({
+                    'message': message,
+                    'sender_username' : username_value
+
+                }))
+                // form.reset()
+            })
+        }
+        else{
+
+            let formElement = document.getElementById("form");
+                if (formElement) {
+                    formElement.parentNode.removeChild(formElement);
+                }
+            let pageHeader = document.getElementById("page-header")
+            const notLoggedIn = document.createElement("p")
+            notLoggedIn.innerHTML = "not logged in"
+            pageHeader.appendChild(notLoggedIn)
+        }
+        
+
+        function getCookieValue (key) {
+            let cookies = document.cookie.split(";");
+            for (let i = 0; i < cookies.length; i++) {
+                let cookie = cookies[i].trim();
+                if (cookie.startsWith(key + "=")) {
+                    return cookie.substring(key.length + 1);
+                }
+            }
+            return null;
+        };
+
+
+    </script>
+</body>
+</html>
